@@ -45,7 +45,6 @@ def test_severity_ok(severity, repository_dir):
         report(title="title", detail={}, renderers=rend.dump(), severity=severity)
         data = mailbox.messages()[0]["message"]["data"]
         assert(not severity or '"severity": "{}"'.format(severity in data))
-        assert False
 
 @pytest.mark.parametrize("severity", ("extreme", 123))
 def test_severity_wrong(severity, repository_dir):
@@ -62,7 +61,7 @@ def test_audience_ok(audience, repository_dir):
         actor = Huh(messaging=mailbox)
         report(title="title", detail={}, renderers=rend.dump(), audience=audience)
         data = mailbox.messages()[0]["message"]["data"]
-        assert('"severity": "{}"'.format(str(audience).replace("'", '"')) in data)
+        assert(not audience or '"audience": {}'.format(str(audience).replace("'", '"')) in data)
 
 @pytest.mark.parametrize("audience", (["user"], [123]))
 def test_audience_wrong(audience, repository_dir):
